@@ -1,4 +1,4 @@
-INSERT INTO users (id, email, roles, password, program_id) VALUES
+INSERT INTO user (id, email, roles, password, program_id) VALUES
                                                                (1, 'user1@example.com', '["ROLE_USER"]', 'hashedpassword1', NULL),
                                                                (2, 'user2@example.com', '["ROLE_USER"]', 'hashedpassword2', NULL),
                                                                (3, 'user3@example.com', '["ROLE_USER"]', 'hashedpassword3', NULL),
