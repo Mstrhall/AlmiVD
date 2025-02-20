@@ -1,0 +1,6 @@
+INSERT INTO flight (id, price, airport_start, airport_end, company, date_start, date_end, id_program_id) VALUES
+                                                                                                             (1, 180.5, 'CDG - Paris Charles de Gaulle', 'FCO - Rome Fiumicino', 'Air France', '2025-04-10', '2025-04-10', 1),
+                                                                                                             (2, 220.0, 'BOD - Bordeaux-Mérignac', 'CDG - Paris Charles de Gaulle', 'Air France', '2025-05-20', '2025-05-20', 2),
+                                                                                                             (3, 150.75, 'LYS - Lyon-Saint Exupéry', 'NCY - Aéroport d\'Annecy', 'EasyJet', '2025-06-05', '2025-06-05', 3),
+(4, 175.3, 'CDG - Paris Charles de Gaulle', 'RNS - Rennes Saint-Jacques', 'Air France', '2025-07-15', '2025-07-15', 4),
+(5, 130.0, 'NCE - Nice Côte d\'Azur', 'ORY - Paris Orly', 'Transavia', '2025-08-10', '2025-08-10', 5);
