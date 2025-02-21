@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Configuration
+MYSQL_USER="root"         # Remplace par ton utilisateur MySQL
+MYSQL_PASSWORD="rootpassword" # Remplace par ton mot de passe
+MYSQL_DATABASE="almy" # Remplace par le nom de ta base de données
+MYSQL_HOST="127.0.0.1"    # Adresse du serveur MySQL
+MYSQL_PORT="3310"         # Port de MySQL
+CSV_FILE="./rental.csv" # Chemin vers ton fichier CSV
+TEMP_CSV_FILE="./rental_converted.csv" # Fichier temporaire avec dates converties
+
+# Vérification si le fichier existe
+if [ ! -f "$CSV_FILE" ]; then
+    echo "❌ Fichier CSV introuvable : $CSV_FILE"
+    exit 1
+fi
+
+# Conversion du format de date (JJ/MM/AAAA -> AAAA-MM-DD) et correction des champs
+awk -F';' 'BEGIN {OFS=";"} NR==1 {print; next} {
+    split($5, end, "/");
+    split($6, start, "/");
+    $5 = end[3] "-" end[2] "-" end[1];
+    $6 = start[3] "-" start[2] "-" start[1];
+    price = ($4 ~ /^[0-9]+$/) ? $4 : 0; # Vérification et conversion du prix
+    print $1, price, $5, $6;
+}' "$CSV_FILE" > "$TEMP_CSV_FILE"
+
+# Commande d'importation MySQL
+mysql --local-infile=1 -h$MYSQL_HOST -P$MYSQL_PORT -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE <<EOF
+LOAD DATA LOCAL INFILE '$TEMP_CSV_FILE'
+INTO TABLE rental
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(place, price, date_end, date_start);
+EOF
+
+# Vérification de l'importation
+if [ $? -eq 0 ]; then
+    echo "✅ Importation réussie !"
+else
+    echo "❌ Échec de l'importation."
+fi
